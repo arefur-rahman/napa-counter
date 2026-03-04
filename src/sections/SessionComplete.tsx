@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Sparkles, RotateCcw } from "lucide-react";
-import enToBnNum from "@/lib/enToBnNum";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
+import { enToBnNum } from "@/lib/numberTranslator";
+import { RotateCcw, Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const congratsMessages = [
     "অভিনন্দন! আপনি সফলভাবে আজকের নাপার চ্যালেঞ্জ কমপ্লিট করেছেন। কন্টিনিউ ব্রো; হবে আপনাকে দিয়েই হবে জাতি খুঁজছে আপনাকে।👑",

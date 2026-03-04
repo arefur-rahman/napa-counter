@@ -9,6 +9,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { bnToEnNum, enToBnNum } from "@/lib/numberTranslator";
 
 const SetTheLimit = ({
     countLimit,
@@ -40,16 +41,17 @@ const SetTheLimit = ({
                 <CardContent className="py-4">
                     <Input
                         ref={inputRef}
-                        type="number"
+                        type="string"
+                        inputMode="numeric"
                         placeholder="কয় পিস নাপা? 🥴"
                         className="text-center placeholder:text-[#ABBABA]/50 text-[#E6F9F9] h-20 placeholder:text-2xl text-4xl [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                        value={countLimit || ""}
+                        value={enToBnNum(countLimit) || ""}
                         onChange={(e) => {
                             const val = e.target.value;
                             if (val === "") {
                                 setCountLimit(undefined);
                             } else {
-                                setCountLimit(Number(val));
+                                setCountLimit(Number(bnToEnNum(val)));
                             }
                         }}
                         onKeyDown={(e) => {

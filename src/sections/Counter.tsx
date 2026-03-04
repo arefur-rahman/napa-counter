@@ -1,12 +1,10 @@
 import { Button } from "@/components/ui/button";
-import enToBnNum from "@/lib/enToBnNum";
-import { Minus } from "lucide-react";
-import { useState } from "react";
 import { Progress } from "@/components/ui/progress";
-import { motion, AnimatePresence } from "framer-motion";
+import { enToBnNum } from "@/lib/numberTranslator";
 import { cn } from "@/lib/utils";
-import { X } from "lucide-react";
-import { useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Minus, X } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const Counter = ({
     countLimit,
@@ -30,7 +28,7 @@ const Counter = ({
         if (countLimit && count >= countLimit) {
             const timer = setTimeout(() => {
                 setCurrentSection("complete");
-            }, 600); // Small delay to let the user see the final count/progress
+            }, 300);
             return () => clearTimeout(timer);
         }
     }, [count, countLimit, setCurrentSection]);
@@ -43,12 +41,16 @@ const Counter = ({
                 setCurrentSection("setTheLimit");
             } else if (e.key === " ") {
                 e.preventDefault();
-                setCount((prev) => prev + 1);
+                setCount((prev) => {
+                    if (countLimit !== undefined && prev >= countLimit)
+                        return prev;
+                    return prev + 1;
+                });
             }
         };
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [setCurrentSection, setCountLimit]);
+    }, [setCurrentSection, setCountLimit, countLimit]);
     const percentage = countLimit
         ? Math.min((count / countLimit) * 100, 100)
         : 0;
@@ -86,7 +88,11 @@ const Counter = ({
             </div>
             <div className="flex justify-center">
                 <Button
-                    onClick={() => setCount(count + 1)}
+                    onClick={() => {
+                        if (countLimit !== undefined && count >= countLimit)
+                            return;
+                        setCount(count + 1);
+                    }}
                     className="relative flex items-center justify-center w-64 h-64 rounded-full bg-linear-to-br from-[#31757A] to-[#41A4A7] shadow-2xl tap-button hover:scale-105 active:scale-95 active:tap-button-active transition-all z-10"
                 >
                     <div className="absolute inset-4 rounded-full border-2 border-[#EDFAFA]/10"></div>
